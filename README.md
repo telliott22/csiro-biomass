@@ -229,7 +229,7 @@ class AuxiliaryPretrainedModel(nn.Module):
 
 ```bash
 # Clone repository
-git clone https://github.com/YOUR_USERNAME/csiro-biomass.git
+git clone https://github.com/telliott22/csiro-biomass.git
 cd csiro-biomass
 
 # Install requirements
@@ -364,7 +364,7 @@ MIT License - See LICENSE file for details
 ## Contact
 
 For questions or collaboration:
-- GitHub: [Create an issue](https://github.com/YOUR_USERNAME/csiro-biomass/issues)
+- GitHub: [Create an issue](https://github.com/telliott22/csiro-biomass/issues)
 - Competition Forum: [Kaggle Discussion](https://www.kaggle.com/competitions/csiro-biomass-prediction/discussion)
 
 ---
