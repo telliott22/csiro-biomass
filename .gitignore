@@ -1,0 +1,75 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints
+*-checkpoint.ipynb
+
+# PyTorch model checkpoints (large files)
+*.pth
+*.pt
+*.ckpt
+*.pkl
+*.h5
+*.weights
+
+# Data files (don't commit large datasets)
+competition/train/
+competition/test/
+competition/*.csv
+*.csv
+!sample_submission.csv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Plots and outputs
+*.png
+*.jpg
+*.jpeg
+*.pdf
+!figures/*.png
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+tmp/
+temp/
+
+# Environment variables
+.env
+.env.local

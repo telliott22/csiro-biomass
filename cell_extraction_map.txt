@@ -1,0 +1,40 @@
+0: [markdown] # Teacher-Student Knowledge Distillation vs Auxiliary Tasks
+1: [markdown] ## ⚙️ Important Setup Notes
+2: [markdown] ---
+3: [code] import pandas as pd
+4: [code] # Configuration: Debug Mode
+5: [code] # Load enriched training data (with weather features)
+6: [code] # Define features and targets
+7: [code] # Train/validation split
+8: [code] # Prepare scalers for tabular features
+9: [markdown] ## Create Dataset Classes
+10: [code] class PastureDataset(Dataset):
+11: [code] # Define model architectures
+12: [code] # Competition-weighted loss function
+13: [markdown] ---
+14: [code] # Training and evaluation utilities
+15: [code] # Train Baseline Model
+16: [code] # Train Baseline Model
+17: [code] # Evaluate Baseline
+18: [markdown] ---
+19: [code] # Teacher Model Architecture
+20: [code] # Teacher-specific training and evaluation functions
+21: [markdown] ---
+22: [code] # Visualization: Competition Scores
+23: [code] # Comparison Table
+24: [markdown] ---
+25: [code] # Train Auxiliary Model
+26: [code] # Train Auxiliary Model
+27: [code] # Training function for auxiliary model
+28: [code] # Auxiliary Multi-Task Loss
+29: [code] # Auxiliary Multi-Task Model
+30: [markdown] ---
+31: [code] # Train Student via Distillation
+32: [code] # Train Student via Distillation
+33: [code] # Training function for student distillation
+34: [code] # Distillation Loss
+35: [code] # Student Model (same architecture as Baseline)
+36: [markdown] ---
+37: [code] # Train Teacher Model
+38: [code] # Train Teacher Model
+39: [markdown] ---
