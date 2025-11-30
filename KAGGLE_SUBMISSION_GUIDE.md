@@ -1,263 +1,287 @@
-# Kaggle Submission Guide
+# Kaggle Submission Guide - Universal Features K-Fold Ensemble
 
-This guide explains how to submit notebook `14_kaggle_submission.ipynb` to the CSIRO Biomass Prediction competition.
+## Quick Start
 
----
+You have **2 files ready** for Kaggle submission:
 
-## Method 1: With Pre-trained Model (Recommended - Fast!)
-
-**Runtime**: ~2-5 minutes (inference only)
-
-### Step 1: Create a Kaggle Dataset with Model Weights
-
-1. **Locate the model checkpoint file**:
-   - File: `model4b_A_Baseline_phase2_best.pth`
-   - Size: ~43 MB
-   - Location: Project root directory
-
-2. **Create a new Kaggle Dataset**:
-   - Go to [kaggle.com/datasets](https://www.kaggle.com/datasets)
-   - Click "New Dataset"
-   - Upload `model4b_A_Baseline_phase2_best.pth`
-   - Name it: `csiro-biomass-model-weights` (or any name you prefer)
-   - Make it public
-   - Click "Create"
-
-### Step 2: Create Kaggle Notebook
-
-1. **Go to the competition**: [CSIRO Biomass Prediction](https://www.kaggle.com/competitions/csiro-biomass-prediction)
-
-2. **Create new notebook**:
-   - Click "Code" tab
-   - Click "New Notebook"
-   - Choose "Notebook" (not Script)
-
-3. **Copy notebook content**:
-   - Open local file: `14_kaggle_submission.ipynb`
-   - Copy all cells (you can open it in Jupyter or text editor)
-   - Paste into Kaggle notebook
-
-### Step 3: Add Model Weights as Input
-
-1. **In your Kaggle notebook, click "Add Data" (top right)**
-
-2. **Search for your dataset**: `csiro-biomass-model-weights` (or whatever you named it)
-
-3. **Add it as input**
-
-4. **Verify the path** in Cell 4:
-   - Kaggle will mount your dataset at: `/kaggle/input/csiro-biomass-model-weights/`
-   - The notebook already includes this path: `../input/csiro-biomass-model-weights/model4b_A_Baseline_phase2_best.pth`
-   - If you used a different dataset name, update the path in Cell 4
-
-### Step 4: Submit
-
-1. **Save notebook version**:
-   - Click "Save Version" (top right)
-   - Choose "Save & Run All"
-   - Wait ~2-5 minutes for execution
-
-2. **Check output**:
-   - Verify `submission.csv` was created
-   - Check for any errors in execution logs
-
-3. **Submit to competition**:
-   - Click "Submit" button
-   - Select the notebook version you just saved
-   - Click "Submit"
-
-4. **Check leaderboard**:
-   - Wait for scoring (~1-2 minutes)
-   - View your public score
-   - Compare with validation R² (+0.6852)
+1. **Notebook**: `25_universal_kfold_kaggle_submission.ipynb`
+2. **Model Checkpoints**: `universal_Fold{1-5}_best.pth` (5 files, ~45MB each)
 
 ---
 
-## Method 2: Train from Scratch (Self-Contained)
+## Step 1: Upload Model Checkpoints as Kaggle Dataset
 
-**Runtime**: ~60 minutes (includes training)
+### Create New Dataset
 
-### Option A: Copy Training Code
+1. Go to [https://www.kaggle.com/datasets](https://www.kaggle.com/datasets)
+2. Click **"New Dataset"**
+3. Upload **5 checkpoint files**:
+   - `universal_Fold1_best.pth`
+   - `universal_Fold2_best.pth`
+   - `universal_Fold3_best.pth`
+   - `universal_Fold4_best.pth`
+   - `universal_Fold5_best.pth`
 
-1. **Open** `13_model4b_final_training.ipynb`
-2. **Copy cells** for A_Baseline variation only:
-   - Configuration
-   - Model architecture
-   - Dataset classes
-   - Training functions (Phase 1 & 2)
-   - Training loop for A_Baseline
-3. **Paste into** new Kaggle notebook
-4. **Remove** other variations (B, C) to save time
-5. **Keep** inference cells from `14_kaggle_submission.ipynb`
+### Dataset Settings
 
-### Option B: Upload Full Training Notebook
+- **Title**: `CSIRO Biomass - Universal K-Fold Models`
+- **Subtitle**: `5-Fold CV models trained with universal features + species`
+- **Description**:
+  ```
+  ResNet18 models trained with K-Fold cross-validation using universal features.
 
-1. **Upload** `13_model4b_final_training.ipynb` to Kaggle
-2. **Remove** variations B and C
-3. **Keep** only A_Baseline training
-4. **Add** submission generation code at the end
+  Key Features:
+  - Universal: NDVI, Height, Daylength, Season, Species (15 classes)
+  - Removed: State, Weather (location-specific)
+  - 5 folds for ensemble averaging
+  - Each model ~45MB, ~11M parameters
 
-### Considerations
+  Expected Kaggle score: 0.52-0.54
+  (Previous K-Fold with location features: 0.50)
+  ```
+- **Visibility**: Private (or Public if you want to share)
 
-**Pros:**
-- No need to upload model weights separately
-- Fully reproducible
-- Shows full training process
+4. Click **"Create"**
+5. **Note the dataset name** (e.g., `username/csiro-biomass-universal-kfold`)
 
-**Cons:**
-- Slower (~60 minutes vs ~5 minutes)
-- Uses more compute resources
-- May hit runtime limits if code has issues
-- Training variance may affect final score slightly
+---
+
+## Step 2: Create Kaggle Notebook
+
+### Upload Notebook
+
+1. Go to competition: [CSIRO Biomass Prediction](https://www.kaggle.com/competitions/csiro-biomass-prediction)
+2. Click **"Code"** tab
+3. Click **"New Notebook"**
+4. Delete default content
+5. Click **"File"** → **"Import Notebook"**
+6. Upload: `25_universal_kfold_kaggle_submission.ipynb`
+
+### Add Data Sources
+
+After uploading notebook:
+
+1. Click **"Add Data"** button (right sidebar)
+2. Add **Competition Data**:
+   - Search: `csiro-biomass`
+   - Click **"Add"**
+3. Add **Your Dataset**:
+   - Search: `csiro-biomass-universal-kfold` (or your dataset name)
+   - Click **"Add"**
+
+### Verify Paths
+
+The notebook should auto-detect paths:
+- Test data: `/kaggle/input/csiro-biomass/test.csv`
+- Models: `../input/YOUR-DATASET-NAME/universal_Fold{1-5}_best.pth`
+
+If paths don't match, update **Cell 4** checkpoint paths:
+```python
+checkpoint_paths = [
+    f'../input/YOUR-ACTUAL-DATASET-NAME/{checkpoint_name}',  # Update this line
+    ...
+]
+```
+
+---
+
+## Step 3: Run Notebook
+
+### Settings
+
+1. **Accelerator**: GPU T4 x2 (or any GPU)
+   - Path: Settings → Accelerator
+   - Universal models work with CPU too, but GPU is faster
+2. **Internet**: OFF (notebook works offline!)
+   - Path: Settings → Internet
+   - Models don't need ImageNet downloads
+
+### Run
+
+1. Click **"Run All"** or **"Save Version"** → **"Run All"**
+2. Wait ~5-10 minutes:
+   - Load 5 models: ~30 seconds
+   - Generate predictions: ~3-5 minutes
+   - Create submission: ~10 seconds
+3. Check output:
+   - Look for: `✅ SUBMISSION FILE CREATED: submission.csv`
+   - Verify: No errors in Cell 4 (model loading)
+
+---
+
+## Step 4: Submit to Competition
+
+### Download Submission
+
+1. After notebook finishes, check **Output** section
+2. Find `submission.csv` in files list
+3. Click to download
+
+### Submit
+
+1. Go to competition: [Submit Predictions](https://www.kaggle.com/competitions/csiro-biomass-prediction/submit)
+2. Click **"Submit Predictions"**
+3. Upload `submission.csv`
+4. Add description:
+   ```
+   Universal Features K-Fold Ensemble (5 folds)
+   - Architecture: ResNet18 + Auxiliary Pretraining
+   - Features: NDVI, Height, Season, Daylength, Species
+   - Removed: State, Weather (location-specific)
+   - Expected: 0.52-0.54
+   ```
+5. Click **"Submit"**
 
 ---
 
 ## Expected Results
 
-### Validation Performance (Local Training)
-- **R²**: +0.6852
-- **Per-target R²**:
-  - Dry_Green_g: +0.6231
-  - Dry_Dead_g: +0.5489
-  - Dry_Clover_g: +0.3892
-  - GDM_g: +0.7145
-  - Dry_Total_g: +0.8234
+### Comparison
 
-### Expected Kaggle Score
-- **Public leaderboard**: Should be close to validation R² (±0.02)
-- **Private leaderboard**: Final score revealed at competition end
+| Approach | Validation R² | Kaggle R² | Notes |
+|----------|--------------|-----------|-------|
+| Baseline (single ResNet18) | +0.69 | **+0.51** | Single 80/20 split |
+| K-Fold with location features | +0.90 | **+0.50** | Learned location bias! |
+| **Universal K-Fold** (this) | ~+0.68 | **+0.52-0.54** | Should generalize! |
+
+### Why This Should Work
+
+✅ **Universal features generalize** to new locations
+✅ **Species is universal** - Ryegrass similar everywhere
+✅ **No State/Weather** - no location bias
+✅ **Ensemble effect** - 5 models reduce overfitting
+
+### If Score is Good (≥0.52)
+
+Confirms location bias was the problem! Next improvements:
+- Try ResNet50 or EfficientNet backbone
+- Tune data augmentation
+- Optimize ensemble weights
+
+### If Score is Still Low (<0.52)
+
+May indicate other distribution shifts. Try:
+- Test-time augmentation (TTA)
+- Different CV split strategy
+- Analyze which target is worst (check per-target R²)
 
 ---
 
 ## Troubleshooting
 
-### Error: "Model checkpoint not found"
+### Error: "Checkpoint not found"
 
-**Solution**: Make sure you:
-1. Uploaded the `.pth` file as a Kaggle dataset
-2. Added the dataset as input to your notebook
-3. Updated the checkpoint path in Cell 4 if using a different dataset name
+**Solution**: Update checkpoint paths in Cell 4
+```python
+checkpoint_paths = [
+    f'../input/YOUR-DATASET-NAME/{checkpoint_name}',  # Must match your dataset name
+    ...
+]
+```
 
-### Error: "No module named 'X'"
+### Error: "Test images not found"
 
-**Solution**: All required packages (torch, torchvision, pandas, etc.) are pre-installed in Kaggle notebooks. If you get this error, check:
-1. You're using a Kaggle notebook (not local Jupyter)
-2. You haven't misspelled the import
-3. You're using Python 3.8+ kernel
-
-### Error: "Notebook does not output submission.csv"
-
-**This is the most common issue!**
-
-**Solution**:
-1. **Verify notebook completed**: Make sure ALL cells executed successfully without errors
-2. **Check the Output tab**: After running, click the "Output" tab on the right - you should see `submission.csv` listed there
-3. **Wait for completion**: Don't submit until you see "✅ SUBMISSION FILE CREATED" in Cell 8 output
-4. **Use "Save & Run All"**: When creating version, select "Save & Run All (Output Only)" not "Quick Save"
-5. **Select correct version**: When submitting, make sure you're selecting the version that just completed
-6. **Check logs**: Look at execution logs - Cell 8 should show the absolute path where file was saved
-
-**Common causes**:
-- Notebook failed partway through (check for errors in earlier cells)
-- Selected wrong notebook version to submit
-- Notebook still running when you tried to submit
-- Cell 8 didn't execute (scroll down and verify all cells ran)
+**Solution**: Verify competition data was added
+1. Check: Right sidebar → "Data" section
+2. Should see: `csiro-biomass-prediction`
+3. If missing: Click "Add Data" → Add competition
 
 ### Error: "CUDA out of memory"
 
-**Solution**:
-1. This shouldn't happen with this notebook (ResNet18 is small)
-2. Reduce `BATCH_SIZE` from 16 to 8 or 4
-3. Make sure GPU is enabled: Settings → Accelerator → GPU
-
-### Warning: "Test set has different number of images"
-
-**Solution**:
-- The local test set has 1 image (sample)
-- The Kaggle hidden test set will have more images
-- The notebook handles any number of images automatically
-- This is expected behavior
-
-### Submission file has wrong format
-
-**Solution**: The notebook automatically creates the correct format:
-```csv
-sample_id,target
-ID1001187975__Dry_Green_g,19.56425
-ID1001187975__Dry_Dead_g,22.73238
-...
+**Solution 1**: Reduce batch size in Cell 2
+```python
+BATCH_SIZE = 8  # Changed from 16
 ```
-- Verify `submission.csv` exists in notebook output
-- Check it has columns: `sample_id`, `target`
-- Each image should have 5 rows (one per target)
+
+**Solution 2**: Use CPU instead
+- Remove GPU accelerator in notebook settings
+- Inference will be slower (~15 min instead of 5 min)
+
+### Submission Format Error
+
+Check Cell 8 output:
+- ✓ Correct columns: `['sample_id', 'target']`
+- ✓ No NaN values
+- ✓ No negative values
+- ✓ Correct number of rows (num_test_images × 5)
 
 ---
 
-## Tips for Best Results
+## Files Summary
 
-### 1. Use GPU Accelerator
-- Settings → Accelerator → GPU
-- Makes inference faster (though CPU is fine for this model)
+### Local Files (In Your Project)
 
-### 2. Check Notebook Output
-- Verify all cells executed successfully
-- Check prediction statistics look reasonable (no NaN, negative values)
-- Confirm submission.csv was created
+```
+/Users/tim/Code/Tim/csiro-biomass/
+├── 24_kfold_universal_features.ipynb     # Training notebook
+├── 25_universal_kfold_kaggle_submission.ipynb  # Submission notebook (THIS ONE)
+├── universal_Fold1_best.pth              # Model 1 (~45MB)
+├── universal_Fold2_best.pth              # Model 2 (~45MB)
+├── universal_Fold3_best.pth              # Model 3 (~45MB)
+├── universal_Fold4_best.pth              # Model 4 (~45MB)
+├── universal_Fold5_best.pth              # Model 5 (~45MB)
+└── competition/
+    └── test.csv                          # Test data (for local testing)
+```
 
-### 3. Multiple Submissions
-- You can submit multiple times
-- Kaggle allows 5 submissions per day
-- Track which notebook version performed best
+### Kaggle Files Structure
 
-### 4. Ensemble (Advanced)
-If you want to improve further:
-1. Train variations B and C as well
-2. Average their predictions
-3. Submit ensemble result
-4. Expected improvement: +0.005 to +0.01 R²
-
----
-
-## Competition Rules Reminder
-
-✅ **Allowed:**
-- Pre-trained models (ImageNet weights)
-- External data (weather APIs, etc.)
-- Any training approach
-- Multiple submissions per day (5 max)
-
-❌ **Not Allowed:**
-- Internet access during notebook execution
-- Manual intervention during run
-- Accessing private test labels
-
-⏱️ **Runtime Limits:**
-- CPU: 9 hours max
-- GPU: 9 hours max
-- This notebook: ~5 min (with pre-trained model) or ~60 min (training from scratch)
-
----
-
-## Questions?
-
-- **Kaggle Discussion**: [Competition Forum](https://www.kaggle.com/competitions/csiro-biomass-prediction/discussion)
-- **GitHub Issues**: [Create Issue](https://github.com/telliott22/csiro-biomass/issues)
-- **Notebook Comments**: Leave comments on Kaggle notebook
+After uploading, your Kaggle environment will look like:
+```
+/kaggle/
+├── input/
+│   ├── csiro-biomass/
+│   │   ├── test.csv
+│   │   └── test/ (images)
+│   └── csiro-biomass-universal-kfold/  # Your dataset
+│       ├── universal_Fold1_best.pth
+│       ├── universal_Fold2_best.pth
+│       ├── universal_Fold3_best.pth
+│       ├── universal_Fold4_best.pth
+│       └── universal_Fold5_best.pth
+└── working/
+    └── submission.csv  # Generated output
+```
 
 ---
 
 ## Quick Checklist
 
-Before submitting, verify:
+Before submitting:
 
-- [ ] Model checkpoint uploaded as Kaggle dataset (Method 1) OR training code included (Method 2)
-- [ ] Dataset added as input to notebook (Method 1 only)
-- [ ] All cells execute without errors
-- [ ] `submission.csv` is created
-- [ ] Submission file has correct format (sample_id, target columns)
-- [ ] No NaN or infinite values in predictions
-- [ ] Notebook runtime < 9 hours (should be much less!)
+- [ ] Uploaded 5 checkpoint files as Kaggle dataset
+- [ ] Created new Kaggle notebook
+- [ ] Added competition data source
+- [ ] Added model checkpoint dataset source
+- [ ] Updated checkpoint paths in Cell 4 (if needed)
+- [ ] Set accelerator to GPU (optional but faster)
+- [ ] Set internet to OFF (works offline)
+- [ ] Ran notebook successfully
+- [ ] Downloaded submission.csv
+- [ ] Submitted to competition
+
+After submitting:
+
+- [ ] Check Kaggle score (should be 0.52-0.54)
+- [ ] Compare with previous attempts (baseline 0.51, prev K-Fold 0.50)
+- [ ] Note which approach worked best
+- [ ] Decide on next improvements if needed
+
+---
+
+## Contact & Help
+
+If you encounter issues:
+
+1. **Check notebook output** - Look for error messages in Cell 4 (model loading) or Cell 7 (predictions)
+2. **Verify data paths** - Use Cell 5 output to confirm test.csv was found
+3. **Check file sizes** - submission.csv should be ~5-10KB for typical test set
+4. **Kaggle forums** - Search for similar issues in competition discussion
 
 ---
 
 Good luck! 🚀
+
+Expected improvement: **+0.01 to +0.03** over previous K-Fold (0.50)
+
+Key insight: **Universal features generalize better to unseen locations!**

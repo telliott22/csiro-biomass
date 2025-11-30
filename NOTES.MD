@@ -1,4 +1,7 @@
 
+- optuna on baseline model
+- remove some features. Do feature analysis then find the most appropriate onese
+
 Need more training data
 - split training and validation data more
 - synthesise test data?
@@ -10,7 +13,10 @@ Need more training data
 - check the feature relationship chart
 
 
+
+
 ### Done
 ~~- loss function? correct one?~~
 ~~- aux is trying to predict NVDI, height and others, not just biomass~~
 ~~- duplicate images for training~~
+
